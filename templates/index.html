@@ -1,0 +1,826 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+    <h1>🛡ReconHub</h1>
+    <h3>Discover. Analyze. Secure.</h3>
+
+    <form method="POST" id="reconForm">
+
+        <select name="type">
+            <option>Domain</option>
+        </select>
+
+        <input
+            type="text"
+            name="target"
+            placeholder="example.com"
+            required
+        >
+
+        <button type="submit">
+            🚀 Start Recon
+        </button>
+
+    </form>
+
+    <!-- Loading -->
+
+    <div id="loading" class="loading-container">
+
+        <div class="spinner"></div>
+
+        <h2>Scanning Target....</h2>
+
+        <p>Please wait while ReconHub collects information.</p>
+
+    </div>
+
+    {% if results %}
+
+    <div class="results">
+        <!-- ========================= -->
+<!-- Security Dashboard -->
+<!-- ========================= -->
+
+<div class="dashboard">
+
+    <div class="dashboard-card">
+        <h3>🌍 WHOIS</h3>
+        <span>{{ "✔" if results.whois else "✖" }}</span>
+    </div>
+    <div class="dashboard-card">
+
+    <h3>🎯 Risk Score</h3>
+
+    <span>{{ results.risk.score }}/100</span>
+
+    <p>{{ results.risk.level }}</p>
+
+</div>
+
+    <div class="dashboard-card">
+        <h3>🌐 DNS</h3>
+        <span>{{ "✔" if results.dns else "✖" }}</span>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>🛰️ Subdomains</h3>
+        <span>{{ results.subdomains|length if results.subdomains else 0 }}</span>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>💻 Technologies</h3>
+        <span>{{ results.technologies|length if results.technologies else 0 }}</span>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>📡 Open Ports</h3>
+        <span>{{ results.ports|length if results.ports else 0 }}</span>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>📄 Reports</h3>
+        <span>
+            {{ (1 if results.pdf_report else 0) + (1 if results.json_report else 0) }}
+        </span>
+    </div>
+
+</div>
+
+<hr>
+
+<h2>📊 Security Dashboard Charts</h2>
+
+<div style="width:700px;margin:auto;">
+    <canvas id="summaryChart"></canvas>
+</div>
+
+        <h2>🎯 Target Information</h2>
+
+        <p><strong>Target:</strong> {{ results.target }}</p>
+
+        <p><strong>Target Type:</strong> {{ results.target_type }}</p>
+
+        <hr>
+
+        <h2>📦 Modules Selected</h2>
+
+        <ul>
+
+        {% for module in results.modules %}
+
+            <li>✅ {{ module }}</li>
+
+        {% endfor %}
+
+        </ul>
+
+        <!-- WHOIS -->
+
+        {% if results.whois %}
+
+        <hr>
+
+        <h2>🌍 WHOIS Information</h2>
+
+        <p><strong>Domain:</strong> {{ results.whois.domain }}</p>
+
+        <p><strong>Registrar:</strong> {{ results.whois.registrar }}</p>
+
+        <p><strong>Created:</strong> {{ results.whois.creation_date }}</p>
+
+        <p><strong>Expires:</strong> {{ results.whois.expiration_date }}</p>
+
+        {% endif %}
+
+        <!-- DNS -->
+
+        {% if results.dns %}
+
+        <hr>
+
+        <h2>🌐 DNS Records</h2>
+
+        <h4>A Records</h4>
+
+        <ul>
+
+        {% for record in results.dns.A %}
+
+            <li>{{ record }}</li>
+
+        {% endfor %}
+
+        </ul>
+
+        <h4>MX Records</h4>
+
+        <ul>
+
+        {% for record in results.dns.MX %}
+
+            <li>{{ record }}</li>
+
+        {% endfor %}
+
+        </ul>
+
+        <h4>Name Servers</h4>
+
+        <ul>
+
+        {% for record in results.dns.NS %}
+
+            <li>{{ record }}</li>
+
+        {% endfor %}
+
+        </ul>
+
+        {% endif %}
+
+        <!-- Subdomains -->
+
+        {% if results.subdomains %}
+
+        <hr>
+
+        <h2>🛰️ Subdomains</h2>
+
+        <ul>
+
+        {% for sub in results.subdomains %}
+
+            <li>{{ sub }}</li>
+
+        {% endfor %}
+
+        </ul>
+
+        {% endif %}
+                <!-- Security Headers -->
+
+        {% if results.security_headers %}
+
+        <hr>
+
+        <h2>🛡️ Security Headers</h2>
+
+        <table border="1" cellpadding="8">
+
+            <tr>
+                <th>Header</th>
+                <th>Value</th>
+            </tr>
+
+            {% for header, value in results.security_headers.items() %}
+
+            <tr>
+                <td>{{ header }}</td>
+                <td>{{ value }}</td>
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+        {% endif %}
+
+
+        <!-- SSL -->
+
+        {% if results.ssl %}
+
+        <hr>
+
+        <h2>🔒 SSL Certificate</h2>
+
+        {% if results.ssl.error %}
+
+            <p>{{ results.ssl.error }}</p>
+
+        {% else %}
+
+            <p><strong>Subject:</strong> {{ results.ssl.subject.commonName }}</p>
+
+            <p><strong>Issuer:</strong> {{ results.ssl.issuer.organizationName }}</p>
+
+            <p><strong>Version:</strong> {{ results.ssl.version }}</p>
+
+            <p><strong>Valid From:</strong> {{ results.ssl.valid_from }}</p>
+
+            <p><strong>Valid Until:</strong> {{ results.ssl.valid_until }}</p>
+
+        {% endif %}
+
+        {% endif %}
+
+
+        <!-- Robots -->
+
+        {% if results.robots %}
+
+        <hr>
+
+        <h2>🤖 robots.txt</h2>
+
+        <p><strong>Status:</strong> {{ results.robots.status }}</p>
+
+        {% if results.robots.status == "Found" %}
+
+        <pre style="max-height:300px;overflow:auto;">
+{{ results.robots.content }}
+        </pre>
+
+        {% else %}
+
+        <p>{{ results.robots.content }}</p>
+
+        {% endif %}
+
+        {% endif %}
+
+
+        <!-- Sitemap -->
+
+        {% if results.sitemap %}
+
+        <hr>
+
+        <h2>🗺️ Sitemap.xml</h2>
+
+        <p><strong>Status:</strong> {{ results.sitemap.status }}</p>
+
+        {% if results.sitemap.status == "Found" %}
+
+            <p><strong>URL:</strong> {{ results.sitemap.url }}</p>
+
+            <pre style="max-height:300px;overflow:auto;">
+{{ results.sitemap.content }}
+            </pre>
+
+        {% else %}
+
+            <p>Sitemap not found.</p>
+
+        {% endif %}
+
+        {% endif %}
+
+
+        <!-- Wayback -->
+
+        {% if results.wayback %}
+
+        <hr>
+
+        <h2>🕒 Wayback Machine</h2>
+
+        <p><strong>Status:</strong> {{ results.wayback.status }}</p>
+
+        {% if results.wayback.status == "Found" %}
+
+            <p><strong>Timestamp:</strong> {{ results.wayback.timestamp }}</p>
+
+            <a href="{{ results.wayback.archive_url }}" target="_blank">
+                {{ results.wayback.archive_url }}
+            </a>
+
+        {% elif results.wayback.error %}
+
+            <p>{{ results.wayback.error }}</p>
+
+        {% endif %}
+
+        {% endif %}
+
+        <!-- GeoIP & Hosting -->
+
+{% if results.geoip %}
+
+<hr>
+
+<h2>🌍 GeoIP & Hosting Information</h2>
+
+{% if results.geoip.error %}
+
+<p>{{ results.geoip.error }}</p>
+
+{% else %}
+
+<table border="1" cellpadding="8">
+
+<tr>
+    <th>Property</th>
+    <th>Value</th>
+</tr>
+
+<tr>
+    <td>IP Address</td>
+    <td>{{ results.geoip.ip }}</td>
+</tr>
+
+<tr>
+    <td>Country</td>
+    <td>{{ results.geoip.country }}</td>
+</tr>
+
+<tr>
+    <td>Region</td>
+    <td>{{ results.geoip.region }}</td>
+</tr>
+
+<tr>
+    <td>City</td>
+    <td>{{ results.geoip.city }}</td>
+</tr>
+
+<tr>
+    <td>ISP</td>
+    <td>{{ results.geoip.isp }}</td>
+</tr>
+
+<tr>
+    <td>Organization</td>
+    <td>{{ results.geoip.org }}</td>
+</tr>
+
+<tr>
+    <td>ASN</td>
+    <td>{{ results.geoip.asn }}</td>
+</tr>
+
+<tr>
+    <td>Timezone</td>
+    <td>{{ results.geoip.timezone }}</td>
+</tr>
+
+<tr>
+    <td>Latitude</td>
+    <td>{{ results.geoip.lat }}</td>
+</tr>
+
+<tr>
+    <td>Longitude</td>
+    <td>{{ results.geoip.lon }}</td>
+</tr>
+
+</table>
+
+{% endif %}
+
+{% endif %}
+
+{% if results.screenshot %}
+
+<hr>
+
+<h2>📸 Website Screenshot</h2>
+
+<img
+    src="/{{ results.screenshot }}"
+    alt="Website Screenshot"
+    style="width:100%;max-width:900px;border-radius:10px;border:1px solid #444;"
+>
+
+<br><br>
+
+<a href="/{{ results.screenshot }}" target="_blank">
+    🔍 Open Full Screenshot
+</a>
+
+{% endif %}
+
+
+        <!-- Technology Fingerprinting -->
+
+        {% if results.technologies %}
+
+        <hr>
+
+        <h2>💻 Technology Fingerprinting</h2>
+
+       <div class="tech-grid">
+
+            {% for category, tech in results.technologies %}
+
+            <div class="tech-card">
+                <strong>{{ category }}:</strong> {{ tech }}
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        {% endif %}
+
+
+        <!-- Google Dorks -->
+
+        {% if results.google_dorks %}
+
+        <hr>
+
+        <h2>🔍 Google Dorks</h2>
+
+        <ul>
+
+        {% for dork in results.google_dorks %}
+
+            <li>{{ dork }}</li>
+
+        {% endfor %}
+
+        </ul>
+
+        {% endif %}
+
+        <!-- CVE Lookup -->
+
+{% if results.cves %}
+
+<hr>
+
+<h2>🚨 Known CVEs</h2>
+
+<table border="1" cellpadding="8">
+
+    <tr>
+        <th>Technology</th>
+        <th>CVE ID</th>
+        <th>Description</th>
+    </tr>
+
+    {% for cve in results.cves %}
+
+    <tr>
+
+        <td>{{ cve.technology }}</td>
+
+        <td>
+            <strong>{{ cve.id }}</strong>
+        </td>
+
+        <td>{{ cve.description }}</td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+{% endif %}
+
+
+        <!-- Open Ports -->
+
+        {% if results.ports %}
+
+        <hr>
+
+        <h2>🌐 Open Ports</h2>
+
+        <table border="1" cellpadding="8">
+
+            <tr>
+                <th>Port</th>
+                <th>Service</th>
+            </tr>
+
+            {% for port in results.ports %}
+
+            <tr>
+
+                <td>{{ port.port }}</td>
+
+                <td>{{ port.service }}</td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+        {% endif %}
+                <!-- Sherlock -->
+
+        {% if results.sherlock %}
+
+        <hr>
+
+        <h2>🕵️ Sherlock Results</h2>
+
+        <pre style="max-height:400px;overflow:auto;">
+{{ results.sherlock }}
+        </pre>
+
+        {% endif %}
+
+
+        <!-- HTTP Fingerprint -->
+
+        {% if results.http %}
+
+        <hr>
+
+        <h2>🌐 HTTP Fingerprint</h2>
+
+        <table border="1" cellpadding="8">
+
+            <tr>
+                <th>Property</th>
+                <th>Value</th>
+            </tr>
+
+            {% for key, value in results.http.items() %}
+
+            <tr>
+                <td>{{ key }}</td>
+                <td>{{ value }}</td>
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+        {% endif %}
+
+
+        <!-- Email Security -->
+
+        {% if results.email_security %}
+
+        <hr>
+
+        <h2>📧 Email Security</h2>
+
+        <table border="1" cellpadding="8">
+
+            <tr>
+                <th>Record</th>
+                <th>Value</th>
+            </tr>
+
+            {% for key, value in results.email_security.items() %}
+
+            <tr>
+                <td>{{ key }}</td>
+                <td>{{ value }}</td>
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+        {% endif %}
+
+
+
+        <!-- JSON Report -->
+
+        {% if results.json_report %}
+
+        <hr>
+
+        <h2>📄 JSON Report</h2>
+
+        <p>Report generated successfully.</p>
+
+        <p><strong>Location:</strong> {{ results.json_report }}</p>
+
+        <a href="/{{ results.json_report }}" target="_blank" class="btn">
+            📂 Open JSON Report
+        </a>
+
+        {% endif %}
+
+
+        <!-- PDF Report -->
+
+        {% if results.pdf_report %}
+
+        <hr>
+
+        <h2>📄 PDF Report</h2>
+
+        <p>PDF report generated successfully.</p>
+
+        <p><strong>Location:</strong> {{ results.pdf_report }}</p>
+
+        <a href="{{ url_for('reports',
+        filename=results.pdf_report.split('/')[-1]) }}"
+        target="_blank">
+
+        📄 Open PDF Report
+
+        </a>
+
+        {% endif %}
+
+    </div>
+
+    {% endif %}
+
+
+
+
+    <!-- Feature Cards -->
+
+    <div class="cards">
+
+        <div class="card">
+            <i class="bi bi-globe"></i>
+            <h3>WHOIS</h3>
+            <p>Domain ownership information</p>
+        </div>
+
+        <div class="card">
+            <i class="bi bi-diagram-3"></i>
+            <h3>DNS Lookup</h3>
+            <p>DNS Enumeration</p>
+        </div>
+
+        <div class="card">
+            <i class="bi bi-diagram-2"></i>
+            <h3>Subdomains</h3>
+            <p>Find Subdomains</p>
+        </div>
+
+        <div class="card">
+            <i class="bi bi-window"></i>
+            <h3>Technology Fingerprinting</h3>
+            <p>Framework & CMS Detection</p>
+        </div>
+
+        <div class="card">
+            <i class="bi bi-shield-check"></i>
+            <h3>Security Headers</h3>
+            <p>HTTP Security Analysis</p>
+        </div>
+
+        <div class="card">
+            <i class="bi bi-lock"></i>
+            <h3>SSL Certificate</h3>
+            <p>Certificate Information</p>
+        </div>
+
+        <div class="card">
+            <i class="bi bi-clock-history"></i>
+            <h3>Wayback</h3>
+            <p>Historical Snapshots</p>
+        </div>
+
+        <div class="card">
+            <i class="bi bi-search"></i>
+            <h3>Google Dorks</h3>
+            <p>Advanced Search Queries</p>
+        </div>
+
+        <div class="card">
+            <i class="bi bi-hdd-network"></i>
+            <h3>Open Ports</h3>
+            <p>Port Scanning</p>
+        </div>
+
+        <div class="card">
+            <i class="bi bi-envelope"></i>
+            <h3>Email Security</h3>
+            <p>SPF • DKIM • DMARC</p>
+        </div>
+
+        <div class="card">
+            <i class="bi bi-file-earmark-pdf"></i>
+            <h3>PDF Report</h3>
+            <p>Professional PDF Export</p>
+        </div>
+
+        <div class="card">
+            <i class="bi bi-filetype-json"></i>
+            <h3>JSON Report</h3>
+            <p>Machine-readable Report</p>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="author-box">
+
+    <p class="author-title">Developed by</p>
+
+    <h3 class="author-name">Sumanth</h3>
+
+    <p class="author-role">
+        B.Tech in Computer Science & Engineering
+    </p>
+
+    <p class="author-role2">
+        Aspiring Cybersecurity Professional
+    </p>
+
+    <p class="author-year">
+    <div class="footer-bottom">
+        © 2026 ReconHub • All Rights Reserved
+    </div>
+        
+    </p>
+
+</div>
+
+
+
+<script>
+
+document.getElementById("reconForm").addEventListener("submit", function () {
+
+    document.getElementById("loading").style.display = "flex";
+
+    const steps = [
+
+        "🌍 WHOIS Lookup...",
+        "🌐 DNS Enumeration...",
+        "🛰 Finding Subdomains...",
+        "💻 Fingerprinting Technologies...",
+        "🛡 Checking Security Headers...",
+        "🔒 Validating SSL...",
+        "🚨 Searching CVEs...",
+        "📡 Scanning Open Ports...",
+        "📄 Generating PDF...",
+        "📦 Generating JSON...",
+        "✅ Scan Completed"
+
+    ];
+
+    let i = 0;
+
+    const status = document.getElementById("statusText");
+
+    const bar = document.getElementById("progressBar");
+
+    const interval = setInterval(function(){
+
+        status.innerHTML = steps[i];
+
+        bar.style.width = ((i+1)/steps.length)*100 + "%";
+
+        i++;
+
+        if(i>=steps.length){
+
+            clearInterval(interval);
+
+        }
+
+    },400);
+
+});
+
+
+</script>
+
+{% endblock %}
+

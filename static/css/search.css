@@ -1,0 +1,23 @@
+input,select{
+
+height:55px;
+
+border-radius:12px;
+
+font-size:18px;
+
+background:#151d2d;
+
+border:1px solid #00ff99;
+
+color:white;
+
+}
+
+input:focus{
+
+box-shadow:0 0 15px #00ff99;
+
+outline:none;
+
+}

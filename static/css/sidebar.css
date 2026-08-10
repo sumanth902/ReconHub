@@ -1,0 +1,52 @@
+.sidebar{
+
+    width:260px;
+    background:#090c12;
+    padding:25px;
+    border-right:1px solid #384d6b;
+
+}
+
+.logo{
+
+    text-align:center;
+    margin-bottom:40px;
+
+}
+
+.logo h2{
+
+    color:#587469;
+
+}
+
+.menu{
+
+    list-style:none;
+
+}
+
+.menu li{
+
+    padding:15px;
+    margin-bottom:10px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:.3s;
+
+}
+
+.menu li:hover{
+
+    background:#7f8d87;
+    color:black;
+    transform:translateX(8px);
+
+}
+
+.active{
+
+    background:#0d2f22;
+    color:black;
+
+}

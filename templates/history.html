@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+    <h1>📜 ReconHub Scan History</h1>
+
+    <br>
+
+    {% if scans %}
+
+    <table border="1" cellpadding="10" cellspacing="0" width="100%">
+
+        <tr>
+            <th>Target</th>
+            <th>Type</th>
+            <th>Risk Score</th>
+            <th>Risk Level</th>
+            <th>Scan Date</th>
+        </tr>
+
+        {% for scan in scans %}
+
+        <tr>
+            <td>{{ scan[0] }}</td>
+            <td>{{ scan[1] }}</td>
+            <td>{{ scan[2] }}/100</td>
+            <td>{{ scan[3] }}</td>
+            <td>{{ scan[4] }}</td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% else %}
+
+    <h3>No scan history found.</h3>
+
+    {% endif %}
+
+    <br><br>
+
+    <a href="/" class="btn">⬅ Back to ReconHub</a>
+
+</div>
+
+{% endblock %}

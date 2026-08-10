@@ -1,0 +1,67 @@
+.results{
+
+margin-top:40px;
+
+animation:fadeUp .8s;
+
+}
+
+.results h2{
+
+color:#00ff88;
+
+margin:25px 0 15px;
+
+}
+
+.results table{
+
+width:100%;
+
+border-collapse:collapse;
+
+background:#111;
+
+margin-top:15px;
+
+border-radius:10px;
+
+overflow:hidden;
+
+}
+
+.results th{
+
+background:#00ff88;
+
+color:black;
+
+padding:14px;
+
+}
+
+.results td{
+
+padding:12px;
+
+border-bottom:1px solid #333;
+
+}
+
+.results tr:hover{
+
+background:#1d1d1d;
+
+}
+
+.results ul{
+
+margin-left:20px;
+
+}
+
+.results li{
+
+margin:8px 0;
+
+}
