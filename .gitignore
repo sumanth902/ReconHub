@@ -22,3 +22,5 @@ reports/
 
 # Windows
 Thumbs.db
+
+static/screenshots/*.png

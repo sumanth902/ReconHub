@@ -22,7 +22,7 @@ from services.geoip_lookup import get_geoip
 from services.screenshot import capture_screenshot
 from services.save_history import save_scan
 from services.cve_lookup import get_cves
-def start_recon(target):
+def start_recon(target, user_id):
 
     target_type = detect_target(target)
 
@@ -99,5 +99,5 @@ def start_recon(target):
     results["json_report"] = export_json(results)
     results["email_security"] = email_security(target)
     results["pdf_report"] = export_pdf(results)
-    save_scan(results)
+    save_scan(results, user_id)
     return results

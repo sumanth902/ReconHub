@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ReconHub Documentation</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #090d14;
+            color: #e5e7eb;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            height: 78px;
+            background: #111827;
+            border-bottom: 1px solid #00ffae;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 35px;
+        }
+
+        .logo {
+            color: #00ffae;
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 17px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #00ffae;
+        }
+
+        /* MAIN */
+
+        .documentation-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 50px auto;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .hero-icon {
+            font-size: 55px;
+            color: #00ffae;
+            margin-bottom: 10px;
+        }
+
+        .hero h1 {
+            color: #00ffae;
+            font-size: 48px;
+            font-weight: 700;
+            text-shadow: 0 0 20px rgba(0, 255, 174, 0.5);
+        }
+
+        .hero p {
+            color: #b8c0cc;
+            font-size: 20px;
+        }
+
+        /* SECTION */
+
+        .doc-section {
+            background: #151d2e;
+            border: 1px solid #00ffae;
+            border-radius: 14px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 20px rgba(0, 255, 174, 0.05);
+        }
+
+        .doc-section h2 {
+            color: #00ffae;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .doc-section p {
+            color: #cbd5e1;
+            line-height: 1.8;
+        }
+
+        /* MODULE GRID */
+
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .module-card {
+            background: #0f1624;
+            border: 1px solid #00ffae;
+            border-radius: 10px;
+            padding: 20px;
+            transition: 0.3s;
+        }
+
+        .module-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 0 15px rgba(0, 255, 174, 0.25);
+        }
+
+        .module-card h3 {
+            color: #00ffae;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .module-card p {
+            margin: 0;
+            font-size: 14px;
+            color: #aeb8c7;
+        }
+
+        /* STEPS */
+
+        .steps {
+            counter-reset: step;
+            padding: 0;
+            list-style: none;
+        }
+
+        .steps li {
+            counter-increment: step;
+            position: relative;
+            padding: 15px 15px 15px 55px;
+            margin-bottom: 12px;
+            background: #0f1624;
+            border-radius: 8px;
+            border-left: 3px solid #00ffae;
+            color: #d1d5db;
+        }
+
+        .steps li::before {
+            content: counter(step);
+            position: absolute;
+            left: 17px;
+            top: 12px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #00ffae;
+            color: #06100c;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* RISK SCORE */
+
+        .risk-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .risk-card {
+            text-align: center;
+            padding: 25px;
+            border-radius: 10px;
+            background: #0f1624;
+            border: 1px solid #334155;
+        }
+
+        .risk-card h3 {
+            font-size: 25px;
+            margin-bottom: 8px;
+        }
+
+        .low {
+            color: #22c55e;
+        }
+
+        .medium {
+            color: #facc15;
+        }
+
+        .high {
+            color: #ef4444;
+        }
+
+        /* REPORTS */
+
+        .report-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .report-list li {
+            background: #0f1624;
+            margin-bottom: 10px;
+            padding: 15px 20px;
+            border-left: 3px solid #00ffae;
+            border-radius: 6px;
+        }
+
+        /* WARNING */
+
+        .warning {
+            border: 1px solid #f59e0b;
+            background: rgba(245, 158, 11, 0.08);
+        }
+
+        .warning h2 {
+            color: #f59e0b;
+        }
+
+        /* BACK BUTTON */
+
+        .back-container {
+            text-align: center;
+            margin: 45px 0;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #00ffae;
+            color: #06100c;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 255, 174, 0.4);
+        }
+
+        /* FOOTER */
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            border-top: 1px solid #1f2937;
+            color: #64748b;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 900px) {
+
+            .module-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .risk-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                height: auto;
+                padding: 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 34px;
+            }
+
+            .module-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .documentation-container {
+                width: 94%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        ReconHub
+    </div>
+
+    <ul class="nav-links">
+
+        <li>
+            <a href="/">Home</a>
+        </li>
+
+        <li>
+            <a href="/history">History</a>
+        </li>
+
+        <li>
+            <a href="/github">GitHub</a>
+        </li>
+
+        <li>
+            <a href="/documentation">Documentation</a>
+        </li>
+
+        <li>
+            <a href="/logout">Logout</a>
+        </li>
+
+    </ul>
+
+</nav>
+
+
+<!-- DOCUMENTATION -->
+
+<main class="documentation-container">
+
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div class="hero-icon">
+            <i class="bi bi-book"></i>
+        </div>
+
+        <h1>ReconHub Documentation</h1>
+
+        <p>
+            Unified OSINT & Footprinting Framework
+        </p>
+
+    </section>
+
+
+    <!-- WHAT IS RECONHUB -->
+
+    <section class="doc-section">
+
+        <h2>
+            <i class="bi bi-shield-check"></i>
+            What is ReconHub?
+        </h2>
+
+        <p>
+            ReconHub is a security reconnaissance and OSINT framework
+            designed to collect and analyze information about authorized
+            targets from multiple security and intelligence sources.
+        </p>
+
+        <p>
+            It combines multiple reconnaissance techniques into a single
+            unified platform, helping security researchers understand the
+            attack surface of a target.
+        </p>
+
+    </section>
+
+
+    <!-- MODULES -->
+
+    <section class="doc-section">
+
+        <h2>
+            <i class="bi bi-search"></i>
+            Reconnaissance Modules
+        </h2>
+
+        <div class="module-grid">
+
+            <div class="module-card">
+                <h3>WHOIS</h3>
+                <p>Domain ownership and registration information.</p>
+            </div>
+
+            <div class="module-card">
+                <h3>DNS Lookup</h3>
+                <p>DNS records and enumeration.</p>
+            </div>
+
+            <div class="module-card">
+                <h3>Subdomains</h3>
+                <p>Discover subdomains associated with a target.</p>
+            </div>
+
+            <div class="module-card">
+                <h3>Technology Fingerprinting</h3>
+                <p>Detect frameworks, CMS platforms and technologies.</p>
+            </div>
+
+            <div class="module-card">
+                <h3>Security Headers</h3>
+                <p>Analyze HTTP security headers.</p>
+            </div>
+
+            <div class="module-card">
+                <h3>SSL Certificate</h3>
+                <p>Collect SSL/TLS certificate information.</p>
+            </div>
+
+            <div class="module-card">
+                <h3>Wayback Machine</h3>
+                <p>Find historical website snapshots.</p>
+            </div>
+
+            <div class="module-card">
+                <h3>Google Dorks</h3>
+                <p>Generate advanced search queries.</p>
+            </div>
+
+            <div class="module-card">
+                <h3>Open Ports</h3>
+                <p>Identify accessible network ports.</p>
+            </div>
+
+            <div class="module-card">
+                <h3>Email Security</h3>
+                <p>Analyze SPF, DKIM and DMARC.</p>
+            </div>
+
+            <div class="module-card">
+                <h3>CVEs</h3>
+                <p>Identify vulnerability information related to detected technologies.</p>
+            </div>
+
+            <div class="module-card">
+                <h3>GeoIP</h3>
+                <p>Identify geographic information associated with an IP address.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- HOW TO USE -->
+
+    <section class="doc-section">
+
+        <h2>
+            <i class="bi bi-gear"></i>
+            How to Use ReconHub
+        </h2>
+
+        <ol class="steps">
+
+            <li>
+                Login to your ReconHub account.
+            </li>
+
+            <li>
+                Select the target type.
+            </li>
+
+            <li>
+                Enter an authorized domain, IP address, email or username.
+            </li>
+
+            <li>
+                Click <strong>Start Recon</strong>.
+            </li>
+
+            <li>
+                ReconHub runs the available reconnaissance modules.
+            </li>
+
+            <li>
+                Review the reconnaissance results and risk score.
+            </li>
+
+            <li>
+                View previous scans from <strong>History</strong>.
+            </li>
+
+            <li>
+                Access generated PDF and JSON reports.
+            </li>
+
+        </ol>
+
+    </section>
+
+
+    <!-- RISK SCORE -->
+
+    <section class="doc-section">
+
+        <h2>
+            <i class="bi bi-bar-chart"></i>
+            Risk Score
+        </h2>
+
+        <p>
+            ReconHub analyzes the collected information and generates
+            an overall risk score between 0 and 100.
+        </p>
+
+        <div class="risk-grid">
+
+            <div class="risk-card">
+                <h3 class="low">0–30</h3>
+                <strong>Low Risk</strong>
+            </div>
+
+            <div class="risk-card">
+                <h3 class="medium">31–70</h3>
+                <strong>Medium Risk</strong>
+            </div>
+
+            <div class="risk-card">
+                <h3 class="high">71–100</h3>
+                <strong>High Risk</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- REPORTS -->
+
+    <section class="doc-section">
+
+        <h2>
+            <i class="bi bi-file-earmark-text"></i>
+            Reports
+        </h2>
+
+        <p>
+            ReconHub can generate reports containing reconnaissance
+            results and security information.
+        </p>
+
+        <ul class="report-list">
+
+            <li>
+                <i class="bi bi-file-earmark-pdf"></i>
+                PDF Report
+            </li>
+
+            <li>
+                <i class="bi bi-filetype-json"></i>
+                JSON Report
+            </li>
+
+        </ul>
+
+    </section>
+
+
+    <!-- RESPONSIBLE USE -->
+
+    <section class="doc-section warning">
+
+        <h2>
+            <i class="bi bi-exclamation-triangle"></i>
+            Responsible Use
+        </h2>
+
+        <p>
+            ReconHub should only be used against systems, domains,
+            IP addresses and accounts that you own or have explicit
+            authorization to test.
+        </p>
+
+        <p>
+            Unauthorized reconnaissance or security testing may violate
+            laws, policies or terms of service.
+        </p>
+
+    </section>
+
+
+    <!-- BACK -->
+
+    <div class="back-container">
+
+        <a href="/" class="back-button">
+            ← Back to ReconHub
+        </a>
+
+    </div>
+
+
+</main>
+
+
+<footer>
+
+    ReconHub © 2026 — Unified OSINT & Footprinting Framework
+
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

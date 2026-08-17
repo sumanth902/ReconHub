@@ -1,7 +1,7 @@
 import sqlite3
 
 
-def save_scan(results):
+def save_scan(results, user_id):
 
     conn = sqlite3.connect("reconhub.db")
 
@@ -16,9 +16,10 @@ def save_scan(results):
             risk_score,
             risk_level,
             pdf_report,
-            json_report
+            json_report,
+            user_id
         )
-        VALUES (?,?,?,?,?,?)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
         """,
         (
             results["target"],
@@ -26,10 +27,10 @@ def save_scan(results):
             results["risk"]["score"],
             results["risk"]["level"],
             results.get("pdf_report", ""),
-            results.get("json_report", "")
+            results.get("json_report", ""),
+            user_id
         )
     )
 
     conn.commit()
-
     conn.close()

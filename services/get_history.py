@@ -1,13 +1,14 @@
 import sqlite3
 
 
-def get_history():
+def get_history(user_id):
 
     conn = sqlite3.connect("reconhub.db")
 
     cursor = conn.cursor()
 
-    cursor.execute("""
+    cursor.execute(
+        """
         SELECT
             target,
             target_type,
@@ -15,8 +16,11 @@ def get_history():
             risk_level,
             scan_time
         FROM scans
+        WHERE user_id = ?
         ORDER BY id DESC
-    """)
+        """,
+        (user_id,)
+    )
 
     rows = cursor.fetchall()
 
