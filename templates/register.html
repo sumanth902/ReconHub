@@ -2,40 +2,65 @@
 
 {% block content %}
 
-<div class="login-box">
+<div class="auth-container">
 
-    <h2>Create Account</h2>
+    <div class="auth-card">
 
-    <form method="POST">
+        <div class="auth-icon">🛡️</div>
 
-        <input
-            type="text"
-            name="fullname"
-            placeholder="Full Name"
-            required
-        >
+        <h2>Create Account</h2>
 
-        <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            required
-        >
+        <p class="auth-subtitle">
+            Join ReconHub and start exploring security intelligence.
+        </p>
 
-        <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            required
-        >
+        <form method="POST" class="auth-form">
 
-        <button type="submit">
+            <div class="input-group">
+                <label for="fullname">Full Name</label>
+                <input
+                    type="text"
+                    id="fullname"
+                    name="fullname"
+                    placeholder="Enter your full name"
+                    required
+                >
+            </div>
 
-            Register
+            <div class="input-group">
+                <label for="email">Email Address</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
+                >
+            </div>
 
-        </button>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Create a password"
+                    required
+                >
+            </div>
 
-    </form>
+            <button type="submit" class="auth-button">
+                Create Account
+            </button>
+
+        </form>
+
+        <div class="auth-footer">
+            Already have an account?
+            <a href="{{ url_for('login.login') }}">Login</a>
+        </div>
+
+    </div>
 
 </div>
 
